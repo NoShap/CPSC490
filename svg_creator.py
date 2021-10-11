@@ -8,8 +8,6 @@ sketch = json.load(f)
 
 # Takes in a set of points and adds them to the input drawing
 def draw_points(point_set, drawing, color="black", scale=50, translate_x=10, translate_y=10):
-	# TODO: you need to make the drawign an argument and then add on the line that is drawn by the points
-	my_drawing = svgwrite.drawing.Drawing(filename=svg_name + ".svg", size=('100%', '100%'))
 
 	for i in range(0, len(point_set)-1):
 		x1 = point_set[i]["x"]* scale + translate_x
