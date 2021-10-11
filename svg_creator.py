@@ -1,22 +1,12 @@
 import json
 import svgwrite
+import numpy as np
 
 # Fetch the Json object
 f = open("single_plane.json")
+g = open("smile.json")
 sketch = json.load(f)
-
-
-# Takes in a set of points and adds them to the input drawing
-def draw_points(point_set, drawing, color="black", scale=50, translate_x=10, translate_y=10):
-
-	for i in range(0, len(point_set)-1):
-		x1 = point_set[i]["x"]* scale + translate_x
-		y1 = point_set[i]["y"] * scale + translate_y
-		x2 = point_set[i+1]["x"] * scale + translate_x
-		y2 = point_set[i+1]["y"] * scale + translate_y
-		line = drawing.line(start=(x1, y1), end=(x2, y2), stroke=color)
-		drawing.add(line)
-		# my_drawing.saveas(svg_name + ".svg")
+smile_sketch = json.load(g)
 
 
 def stroke_to_points(stroke):
@@ -28,6 +18,18 @@ def plane_to_strokes(plane):
 def sketch_to_planes(sketch):
 	return sketch["planes"]
 
+# Takes in a set of points and adds them to the input drawing
+def draw_points(point_set, drawing, color="black", scale=-50, translate_x=150, translate_y=150):
+
+	for i in range(0, len(point_set)-1):
+		x1 = point_set[i]["x"]* scale + translate_x
+		y1 = point_set[i]["y"] * scale + translate_y
+		x2 = point_set[i+1]["x"] * scale + translate_x
+		y2 = point_set[i+1]["y"] * scale + translate_y
+		line = drawing.line(start=(x1, y1), end=(x2, y2), stroke=color)
+		drawing.add(line)
+
+
 # Draw all the sketches of a plane and create a new svg
 def draw_plane(plane, svg_name):
 	my_drawing = svgwrite.drawing.Drawing(filename=svg_name + ".svg", size=('100%', '100%'))
@@ -36,30 +38,37 @@ def draw_plane(plane, svg_name):
 	for stroke in strokes:
 		point_set = stroke_to_points(stroke)
 		draw_points(point_set, my_drawing)
-
 	my_drawing.saveas(svg_name + ".svg")
 
 
 
-	pass
-# For each plane in the JSON object, draw it's points onto our output file
-for pl in sketch["planes"]: # Each json file has a list of planes...
-	for stroke in pl["strokes"]:		   # which each have a list of objects...
-		pass # print(stroke)		   # one of those objects is the strokes, which each have a list of points
+draw_plane(smile_sketch["planes"][0], "test_draw")
 
-draw_plane(sketch["planes"][0], "test_draw")
 
-# draw_points(sketch["planes"][0]["strokes"][1]["points"], "black", "new_sketch", 30, 20, 20)
-# draw_points(sketch["planes"][0]["strokes"][0]["points"], "black", "new_sketch", 30, 20, 20)
+# Takes degrees in radians!
+# Takes initial rotation of plane and returns it back to 0, 0, 0 
+def rotate_point(x_r, y_r, z_r, point):
+	#rotate X
+	x_transform = np.array(
+		[1, 0, 0],
+		[0, np.cos(x_r), -np.sin(x_r)], 
+		[0, np.sin(x_r), np.cos(x_r)])
+
+	y_transform = np.array(
+		[np.cos(y_r), 0, np.sin(y_r)],
+		[0, 1, 0], 
+		[-np.sin(y_r), 0, np.cos(y_r)])
+
+	z_transform = np.array(
+		[np.cos(z_r), -np.sin(z_r), 0],
+		[np.sin(z_r), np.cos(z_r), 0],
+		[0, 0, 1])
+
 
 
 
 
 # draw_points(sketch["planes"][0]["strokes"][0]
-
-# for stroke in sketch["planes"][0]["strokes"]:
-# 	stroke_points = stroke_to_points(stroke)
-# 	draw_points(stroke_points)
 	
 		
 #Rotation Matrices to be applied!
@@ -69,6 +78,13 @@ draw_plane(sketch["planes"][0], "test_draw")
 # sin φ cos φ    0
 # 0 	   0	   1]
 
+# rotate-y = 
+
+# [cosφ   0   sinφ 
+# 0      1    0
+# -sinφ   0 cos φ]
+
+
 # rotate-x = 
 
 # [1   0   0 
@@ -76,9 +92,5 @@ draw_plane(sketch["planes"][0], "test_draw")
 # o sinφ  cos φ]
 
 
-# rotate-y = 
 
-# [cosφ   0   sinφ 
-# 0      1    0
-# -sinφ   0 cos φ]
 
