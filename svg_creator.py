@@ -5,8 +5,10 @@ import numpy as np
 # Fetch Json objects
 f = open("rotation_smile2.json")
 g = open("smile.json")
+h = open ("rotated_smile.json")
 rotated_sketch = json.load(f)
 smile_sketch = json.load(g)
+rotated_smile = json.load(h)
 
 
 #Helper methods for consuming JSON
@@ -81,13 +83,13 @@ def rotate_plane(plane, x_r, y_r, z_r):
 			rotate_point(point, x_r, y_r, z_r)
 
 
-print(point)
-rotate_point(point, 0, -1.5707963267948966, 0)
-print(point)
 
-rotate_plane(smile_sketch["planes"][0],  -1.5707963267948966) 
 draw_plane(smile_sketch["planes"][0], "test_draw")
-draw_plane(smile_sketch["planes"][0], "test_draw")
+
+draw_plane(rotated_sketch["planes"][0], "rotated_draw1")
+rotate_plane(rotated_sketch["planes"][0], 0,  -1.5707963267948966, 0) 
+draw_plane(rotated_sketch["planes"][0], "rotated_draw2")
+draw_plane(rotated_smile["planes"][0], "rotated_draw3")
 
 # 
 # draw_plane(smile_sketch["planes"][0], "test_draw")
