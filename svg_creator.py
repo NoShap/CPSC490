@@ -2,13 +2,14 @@ import json
 import svgwrite
 import numpy as np
 
-# Fetch the Json object
-f = open("single_plane.json")
+# Fetch Json objects
+f = open("rotation_smile2.json")
 g = open("smile.json")
-sketch = json.load(f)
+rotated_sketch = json.load(f)
 smile_sketch = json.load(g)
 
 
+#Helper methods for consuming JSON
 def stroke_to_points(stroke):
 	return stroke["points"]
 
@@ -42,55 +43,58 @@ def draw_plane(plane, svg_name):
 
 
 
-draw_plane(smile_sketch["planes"][0], "test_draw")
-
-
 # Takes degrees in radians!
-# Takes initial rotation of plane and returns it back to 0, 0, 0 
-def rotate_point(x_r, y_r, z_r, point):
-	#rotate X
+# Takes in rotation and point dictionary, updates point
+def rotate_point(point, x_r, y_r, z_r):
+	point_vector = np.array(list(point.values()))
 	x_transform = np.array(
-		[1, 0, 0],
+		[[1, 0, 0],
 		[0, np.cos(x_r), -np.sin(x_r)], 
-		[0, np.sin(x_r), np.cos(x_r)])
+		[0, np.sin(x_r), np.cos(x_r)]])
 
-	y_transform = np.array(
+	y_transform = np.array([
 		[np.cos(y_r), 0, np.sin(y_r)],
 		[0, 1, 0], 
-		[-np.sin(y_r), 0, np.cos(y_r)])
+		[-np.sin(y_r), 0, np.cos(y_r)]])
 
-	z_transform = np.array(
+	z_transform = np.array([
 		[np.cos(z_r), -np.sin(z_r), 0],
 		[np.sin(z_r), np.cos(z_r), 0],
-		[0, 0, 1])
+		[0, 0, 1]])
+
+	#Potentially throw an error if an invalid point is input
+	result_vector = np.matmul(x_transform, point_vector)
+	result_vector = np.matmul(y_transform, result_vector)
+	result_vector = np.matmul(z_transform, result_vector)
+	point["x"] = result_vector[0]
+	point["y"] = result_vector[1]
+	point["z"] = result_vector[2]
+
+
+
+
+#TODO: Try with helper methods
+# rotate all the points in a plane
+def rotate_plane(plane, x_r, y_r, z_r):
+	for stroke in plane["strokes"]:
+		for point in stroke["points"]:
+			rotate_point(point, x_r, y_r, z_r)
+
+
+print(point)
+rotate_point(point, 0, -1.5707963267948966, 0)
+print(point)
+
+rotate_plane(smile_sketch["planes"][0],  -1.5707963267948966) 
+draw_plane(smile_sketch["planes"][0], "test_draw")
+draw_plane(smile_sketch["planes"][0], "test_draw")
+
+# 
+# draw_plane(smile_sketch["planes"][0], "test_draw")
 
 
 
 
 
 # draw_points(sketch["planes"][0]["strokes"][0]
-	
-		
-#Rotation Matrices to be applied!
-# rotate-z = 
-
-# [cos φ − sin φ 0
-# sin φ cos φ    0
-# 0 	   0	   1]
-
-# rotate-y = 
-
-# [cosφ   0   sinφ 
-# 0      1    0
-# -sinφ   0 cos φ]
-
-
-# rotate-x = 
-
-# [1   0   0 
-# 0 cosφ -sinφ
-# o sinφ  cos φ]
-
-
-
 
