@@ -8,6 +8,7 @@ sketch = json.load(f)
 
 # Takes in a set of points and saves an svg in this file's directory
 def draw_points(point_set, color="black", svg_name="new_sketch", scale=50, translate_x=10, translate_y=10):
+	# TODO: you need to make the drawign an argument and then add on the line that is drawn by the points
 	my_drawing = svgwrite.drawing.Drawing(filename=svg_name + ".svg", size=('100%', '100%'))
 
 	for i in range(0, len(point_set)-1):
@@ -34,18 +35,20 @@ for pl in sketch["planes"]: # Each json file has a list of planes...
 		pass # print(stroke)		   # one of those objects is the strokes, which each have a list of points
 
 
-draw_points(sketch["planes"][0]["strokes"][0]["points"], "black", "new_svg", 30, 20, 20)
+draw_points(sketch["planes"][0]["strokes"][1]["points"], "black", "new_sketch", 30, 20, 20)
+draw_points(sketch["planes"][0]["strokes"][0]["points"], "black", "new_sketch", 30, 20, 20)
 
 
 
 
-for stroke in sketch["planes"][0]["strokes"]:
-	stroke_points = stroke_to_points(stroke)
-	draw_points(stroke_points)
+# draw_points(sketch["planes"][0]["strokes"][0]
+
+# for stroke in sketch["planes"][0]["strokes"]:
+# 	stroke_points = stroke_to_points(stroke)
+# 	draw_points(stroke_points)
 	
 		
 #Rotation Matrices to be applied!
-
 # rotate-z = 
 
 # [cos φ − sin φ 0
