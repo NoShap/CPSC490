@@ -1,0 +1,9 @@
+ply
+format ascii 1.0
+element vertex ???
+
+
+#How to write your own obj
+
+# what are the options for attaching properties to lines in unity
+-- start looking for different styles for them in unity

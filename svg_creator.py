@@ -77,19 +77,26 @@ def rotate_point(point, x_r, y_r, z_r):
 
 #TODO: Try with helper methods
 # rotate all the points in a plane
-def rotate_plane(plane, x_r, y_r, z_r):
-	for stroke in plane["strokes"]:
-		for point in stroke["points"]:
-			rotate_point(point, x_r, y_r, z_r)
+# def rotate_plane(plane, x_r, y_r, z_r):
+# 	for stroke in plane["strokes"]:
+# 		for point in stroke["points"]:
+# 			rotate_point(point, x_r, y_r, z_r)
+
+# for 
 
 
 
-draw_plane(smile_sketch["planes"][0], "test_draw")
+# draw_plane(smile_sketch["planes"][0], "test_draw")
 
-draw_plane(rotated_sketch["planes"][0], "rotated_draw1")
-rotate_plane(rotated_sketch["planes"][0], 0,  -1.5707963267948966, 0) 
-draw_plane(rotated_sketch["planes"][0], "rotated_draw2")
-draw_plane(rotated_smile["planes"][0], "rotated_draw3")
+# draw_plane(rotated_sketch["planes"][0], "rotated_draw1")
+# rotate_plane(rotated_sketch["planes"][0], 0,  -1.5707963267948966/2, 0) 
+# draw_plane(rotated_sketch["planes"][0], "rotated_draw2")
+# draw_plane(rotated_smile["planes"][0], "rotated_draw3")
+
+
+
+#OBJ is jsut 4 vertices of a plane and then 
+#ply file 
 
 # 
 # draw_plane(smile_sketch["planes"][0], "test_draw")
