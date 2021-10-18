@@ -1,6 +1,7 @@
 import json
 import svgwrite
 import numpy as np
+import bpy
 
 # Fetch Json objects
 f = open("rotation_smile2.json")
@@ -45,44 +46,33 @@ def draw_plane(plane, svg_name):
 
 
 
-# Takes degrees in radians!
-# Takes in rotation and point dictionary, updates point
-def rotate_point(point, x_r, y_r, z_r):
-	point_vector = np.array(list(point.values()))
-	x_transform = np.array(
-		[[1, 0, 0],
-		[0, np.cos(x_r), -np.sin(x_r)], 
-		[0, np.sin(x_r), np.cos(x_r)]])
+# 
+verts = []
+edges = []
+faces = []
 
-	y_transform = np.array([
-		[np.cos(y_r), 0, np.sin(y_r)],
-		[0, 1, 0], 
-		[-np.sin(y_r), 0, np.cos(y_r)]])
+verts.append([0.0, 10.0, 0.0]) #index 0
+verts.append([10.0, 0.0, 0.0]) # index 1
+verts.append([0.0, 0.0, 10.0]) # index 2
+verts.append([-10.0, 0.0, 0.0]) # index 3
 
-	z_transform = np.array([
-		[np.cos(z_r), -np.sin(z_r), 0],
-		[np.sin(z_r), np.cos(z_r), 0],
-		[0, 0, 1]])
-
-	#Potentially throw an error if an invalid point is input
-	result_vector = np.matmul(x_transform, point_vector)
-	result_vector = np.matmul(y_transform, result_vector)
-	result_vector = np.matmul(z_transform, result_vector)
-	point["x"] = result_vector[0]
-	point["y"] = result_vector[1]
-	point["z"] = result_vector[2]
+edges.append([0,1])
+edges.append([1,2])
+edges.append([0,2])
+edges.append([0,3])
+edges.append([2,3])
 
 
 
-
-#TODO: Try with helper methods
-# rotate all the points in a plane
-# def rotate_plane(plane, x_r, y_r, z_r):
-# 	for stroke in plane["strokes"]:
-# 		for point in stroke["points"]:
-# 			rotate_point(point, x_r, y_r, z_r)
-
-# for 
+name = "New Object"
+mesh = bpy.data.meshes.new('new_mesh')
+mesh.from_pydata(verts, edges, faces)
+mesh.update()
+obj = bpy.data.objects.new(name, mesh)
+mod_skin = obj.modifiers.new('skin', 'SKIN')
+new_collection = bpy.data.collections.new('new_collection')
+bpy.context.scene.collection.children.link(new_collection)
+new_collection.objects.link(obj)
 
 
 

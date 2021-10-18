@@ -1,29 +1,62 @@
-# import bpy
+import bpy
 import json
+import os
 
-g = open("smile.json")
-smile_sketch = json.load(g)
+os.chdir("/Users/noahshapiro/Documents/Yale/Senior/Fall/CPSC490/")
+f = open("smile.json")
+g = open("house_test.json")
+smile_sketch = json.load(f)
+house_sketch = json.load(g)
+
+#Helper methods for consuming JSON
+def stroke_to_points(stroke):
+	return stroke["points"]
+
+def plane_to_strokes(plane):
+	return plane["strokes"]
+
+def sketch_to_planes(sketch):
+	return sketch["planes"]
 
 
-# Creating a mesh from the all the exported 3D points
-# Drawbacks - no plane attributes
+def draw_points_3D(point_set, translate_x=0, translate_y=0, translate_z=0, scale=-10,):
+    verts = []
+    edges = []
+    faces = []
+    for i in range(0, len(point_set)-1):
+        x = (point_set[i]["x"] + translate_x) * scale 
+        y = (point_set[i]["y"] + translate_y) * scale 
+        z = (point_set[i]["z"] + translate_z) * scale 
+        verts.append([x, z, y])
+        
+    for i in range(0, len(verts)-1):
+        edges.append([i, i+1])
+        
+    name = "New Object"
+    mesh = bpy.data.meshes.new('new_mesh')
+    mesh.from_pydata(verts, edges, faces)
+    mesh.update()
+    obj = bpy.data.objects.new(name, mesh)
+    mode_skin = obj.modifiers.new('skin', 'SKIN')
+    new_collection = bpy.data.collections.new('new_collection')
+    bpy.context.scene.collection.children.link(new_collection)
+    new_collection.objects.link(obj)
+    
 
-verts = []
+# Draw all the sketches of a plane and create a new svg
+def draw_plane_3D(plane):
+    strokes = plane_to_strokes(plane)
+    trans_x = plane["position"]["x"]
+    trans_y = plane["position"]["y"]
+    trans_z = plane["position"]["z"]
+    for stroke in strokes:
+        point_set = stroke_to_points(stroke)
+        draw_points_3D(point_set, trans_x, trans_y, trans_z)
 
-for plane in smile_sketch["planes"]:
-	for stroke in plane["strokes"]:
-		for point in stroke["points"]:
-			print(point.values())
-			# verts.append(list(point.values()))
+def draw_sketch(sketch):
+    for plane in sketch_to_planes(sketch):
+        draw_plane_3D(plane)
 
-
-
-# name = "Test Object"
-# mesh = bpy.data.meshes.new(name)
-# obj = bpy.data.objects.new(name, mesh)
-# col = bpy.data.collections.get("Objects")
-# col.objects.link(obj)
-# bpy.context.view_layer.objects.active = obj
-# mesh.from_pydata(verts, edges, faces)
-
-# print(verts)
+draw_sketch(house_sketch)
+        
+ 
