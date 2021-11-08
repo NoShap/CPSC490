@@ -60,6 +60,6 @@ def draw_sketch(sketch):
 
 draw_sketch(house_sketch)
 bpy.ops.export_scene.obj(filepath="../models/new_save_test.obj")
-print("made it to the end!")
+
         
  
