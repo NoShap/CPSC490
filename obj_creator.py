@@ -2,10 +2,11 @@ import bpy
 import json
 import os
 
-os.chdir("/Users/noahshapiro/Documents/Yale/Senior/Fall/CPSC490/")
-f = open("smile.json")
+os.chdir("/Users/noahshapiro/Documents/Yale/Senior/Fall/CPSC490/JSONs")
+print("Listing Directory:")
+print("current working Directory:", os.getcwd())
+
 g = open("house_test.json")
-smile_sketch = json.load(f)
 house_sketch = json.load(g)
 
 #Helper methods for consuming JSON
@@ -58,5 +59,7 @@ def draw_sketch(sketch):
         draw_plane_3D(plane)
 
 draw_sketch(house_sketch)
+bpy.ops.export_scene.obj(filepath="../models/new_save_test.obj")
+print("made it to the end!")
         
  
