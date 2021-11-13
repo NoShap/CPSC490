@@ -6,7 +6,7 @@ os.chdir("/Users/noahshapiro/Documents/Yale/Senior/Fall/CPSC490/JSONs")
 print("Listing Directory:")
 print("current working Directory:", os.getcwd())
 
-g = open("house_test.json")
+g = open("lightbulb_test2.json")
 house_sketch = json.load(g)
 
 #Helper methods for consuming JSON
@@ -59,7 +59,24 @@ def draw_sketch(sketch):
         draw_plane_3D(plane)
 
 draw_sketch(house_sketch)
-bpy.ops.export_scene.obj(filepath="../models/new_save_test.obj")
+bpy.ops.export_scene.obj(filepath="../models/example_test.obj")
+
+
+# Look into fetch API
+# sequentially name and assign models
+# folder on my machine - we have 10 images - run a simple python server, 
+# very simple to implement a server where given a file name, localhost://a.jpg Use Flask for 
+
+
+# Move positions back relative to each other -
+# Alter individual positions and bring that back to 3D of rearranged objects
+# make sure that positions are kept in Json 
+
+
+
+
+
+
 
         
  
